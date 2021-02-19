@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.abyte.valet.myapplication.MainActivity;
 import com.abyte.valet.myapplication.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class SetScoreFragment extends Fragment {
@@ -37,11 +39,12 @@ public class SetScoreFragment extends Fragment {
 
        view.findViewById(R.id.btn_set).setOnClickListener(v ->{
            students.get(position).setScore(Integer.valueOf(((EditText) view.findViewById(R.id.et_score)).getText().toString()));
-           ListFragment fragment = new ListFragment();
            Bundle bundle = new Bundle();
            bundle.putSerializable(MainActivity.MSG_NAME, students);
-           fragment.setArguments(bundle);
-           ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fl_for_fragment, fragment).commit();
+
+           NavHostFragment.findNavController(Objects.requireNonNull(((AppCompatActivity) getContext()).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)))
+                   .navigate(R.id.action_setScoreFragment_to_listFragment, bundle);
+
        });
         return view;
     }
